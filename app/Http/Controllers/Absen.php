@@ -52,7 +52,7 @@ class Absen extends BaseController
             'foto'=> 'required',
             'lokasi'=> 'required'
         ]);
-        $tgl = date('Y-d-m',strtotime($request->tgl));
+        $tgl = date('Y-m-d');
         $absen_model = new absen_model;
         $absen_model->id_karyawan = $request->id;
         $absen_model->tgl = $tgl;
@@ -66,10 +66,10 @@ class Absen extends BaseController
             ['absen.tgl','=',$tgl]
         ])->count();
         if($cek_absen > 0){
-            return redirect('cek')->with('status','Data Tidak Masuk, '.$request->nama.' Anda telah absen sebelumnya dengan status sama!');
+            return redirect('cek')->with('status','Data Tidak Masuk, '.$request->nama.' Anda telah absen sebelumnya dengan status sama!')->with('alert-class','alert-danger');
         }else{
             if($absen_model->save()){
-                return redirect('cek')->with('status','Alhamdulillah, '.$request->nama.' Anda telah absen '.$request->ket.'');
+                return redirect('cek')->with('status','Alhamdulillah, '.$request->nama.' Anda telah absen '.$request->ket.'')->with('alert-class','alert-success');
             } else{
                 return redirect('cek')->with('status','Data Gagal masuk');
             }

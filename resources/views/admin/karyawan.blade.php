@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-header">
                         @if (session('status'))
-                            <div class="alert alert-success alert-dismissible" role="alert">
+                            <div class="alert {{session('alert-class')}} alert-dismissible" role="alert" id="message">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
@@ -281,6 +281,12 @@
     $(document).ready(function() {
         $('#tabel').DataTable()
     } );
+    setTimeout(function() {
+        $('#message').fadeTo(500, 0).slideUp(500, function(){
+                    
+        $(this).remove(); 
+        });
+    }, 6000);
 </script>
 
 @endsection

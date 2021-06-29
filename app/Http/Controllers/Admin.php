@@ -50,9 +50,9 @@ class Admin extends Controller
         $karyawan->masuk = $request->tgl;
         $karyawan->no_hp = $request->no_hp;
         if($karyawan->save()){
-            return redirect('karyawan')->with('status','Data Karyawan Telah Masuk');
+            return redirect('karyawan')->with('status','Data Karyawan Telah Masuk')->with('alert-class','alert-success');
         } else{
-            return redirect('karyawan')->with('status','Data Gagal masuk');
+            return redirect('karyawan')->with('status','Data Gagal masuk')->with('alert-class','alert-danger');
         }
     }
     public function update_karyawan(Request $request){
@@ -75,17 +75,17 @@ class Admin extends Controller
             'no_hp'=>$data['no_hp']
         ]);
         if($hasil=true){
-            return redirect('karyawan')->with('status','Data Karyawan Telah di ubah');
+            return redirect('karyawan')->with('status','Data Karyawan Telah di ubah')->with('alert-class','alert-success');
         } else{
-            return redirect('karyawan')->with('status','Data Gagal masuk');
+            return redirect('karyawan')->with('status','Data Gagal masuk')->with('alert-class','alert-danger');
         }
     }
     public function hapus_karyawan(Request $request){
         $hasil = DB::table('karyawan')->where('id_karyawan', '=', $request->id_hapus)->delete();
         if($hasil=true){
-            return redirect('karyawan')->with('status','atas nama '.$request->nama_hapus.' Telah di hapus');
+            return redirect('karyawan')->with('status','atas nama '.$request->nama_hapus.' Telah di hapus')->with('alert-class','alert-success');
         } else{
-            return redirect('karyawan')->with('status','Data Gagal di hapus');
+            return redirect('karyawan')->with('status','Data Gagal di hapus')->with('alert-class','alert-danger');
         }
     }
     public function unit(){
@@ -104,9 +104,9 @@ class Admin extends Controller
         $admin->id_unit = $request->id;
         $admin->nama_unit = $request->nama;
         if($admin->save()){
-            return redirect('unit')->with('status','Data Telah Masuk');
+            return redirect('unit')->with('status','Data Telah Masuk')->with('alert-class','alert-success');
         } else{
-            return redirect('unit')->with('status','Data Gagal masuk');
+            return redirect('unit')->with('status','Data Gagal masuk')->with('alert-class','alert-danger');
         }
     }
     public function update_unit(Request $request){
@@ -120,17 +120,17 @@ class Admin extends Controller
             'nama_unit'=>$data['nama_unit'],
         ]);
         if($hasil=true){
-            return redirect('unit')->with('status','Data Unit Telah di ubah');
+            return redirect('unit')->with('status','Data Unit Telah di ubah')->with('alert-class','alert-success');
         } else{
-            return redirect('unit')->with('status','Data Gagal masuk');
+            return redirect('unit')->with('status','Data Gagal masuk')->with('alert-class','alert-danger');
         }
     }
     public function hapus_unit(Request $request){
         $hasil = DB::table('unit')->where('id_unit', '=', $request->id)->delete();
         if($hasil=true){
-            return redirect('unit')->with('status','Data berhasil di hapus');
+            return redirect('unit')->with('status','Data berhasil di hapus')->with('alert-class','alert-success');
         } else{
-            return redirect('unit')->with('status','Data Gagal');
+            return redirect('unit')->with('status','Data Gagal')->with('alert-class','alert-danger');
         }
     }
     public function tambah_amanah(Request $request){
@@ -138,17 +138,17 @@ class Admin extends Controller
         $admin->nama_amanah = $request->nama;
         $admin->id_unit = $request->kode;
         if($admin->save()){
-            return redirect('unit')->with('status','Data Telah Masuk');
+            return redirect('unit')->with('status','Data Telah Masuk')->with('alert-class','alert-success');
         } else{
-            return redirect('unit')->with('status','Data Gagal masuk');
+            return redirect('unit')->with('status','Data Gagal masuk')->with('alert-class','alert-danger');
         }
     }
     public function hapus_amanah(Request $request){
         $hasil = DB::table('amanah')->where('id_amanah', '=', $request->id)->delete();
         if($hasil=true){
-            return redirect('unit')->with('status','Data berhasil di hapus');
+            return redirect('unit')->with('status','Data berhasil di hapus')->with('alert-class','alert-success');
         } else{
-            return redirect('unit')->with('status','Data Gagal');
+            return redirect('unit')->with('status','Data Gagal')->with('alert-class','alert-danger');
         }
     }
     public function list_absen(){
@@ -184,7 +184,7 @@ class Admin extends Controller
                 ->get();
         
         if($data_absen->isEmpty()){
-            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali');
+            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali')->with('alert-class','alert-danger');
         } else{
             return view('admin/cari-nama')->with('data_absen',$data_absen);
         }
@@ -201,7 +201,7 @@ class Admin extends Controller
                 ->orderBy('absen.tgl','asc')
                 ->get();
         if($data_absen->isEmpty()){
-            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali');
+            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali')->with('alert-class','alert-danger');
         } else{
             return view('admin/cari-unit')->with('data_absen',$data_absen);
         }
@@ -217,7 +217,7 @@ class Admin extends Controller
                 ->orderBy('karyawan.nama','asc')
                 ->get();
         if($data_absen->isEmpty()){
-            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali');
+            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali')->with('alert-class','alert-danger');
         } else{
             return view('admin/cari-bulan')->with('data_absen',$data_absen);
         }
@@ -235,7 +235,7 @@ class Admin extends Controller
                 ->orderBy('karyawan.nama','asc')
                 ->get();
         if($data_absen->isEmpty()){
-            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali');
+            return redirect('/list_absen')->with('status','Data yang anda cari tidak ada, Periksa Kembali')->with('alert-class','alert-danger');
         } else{
             return view('admin/cari-bulan')->with('data_absen',$data_absen);
         }

@@ -7,13 +7,13 @@
 
         <h1 class="h3 mb-3">Data Absen</h1>
         <div class="row">
-            <div class="container">
+            <div class="container" >
                 @if (session('status'))
-                            <div class="alert alert-danger alert-dismissible" role="alert">
+                            <div class="alert {{session('alert-class')}} alert-dismissible" role="alert" id="message">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
-                                <div class="alert-message">
+                                <div class="alert-message" >
                                     <b>{{session('status')}}</b>
                                 </div>
                             </div>
@@ -520,6 +520,14 @@
         })
         
     } );
+
+
+    setTimeout(function() {
+        $('#message').fadeTo(500, 0).slideUp(500, function(){
+                    
+            $(this).remove(); 
+            });
+        }, 6000);
 </script>
 
 @endsection

@@ -14,6 +14,7 @@ class Amanah extends Migration
     public function up()
     {
         //
+        Schema::dropIfExists('amanah');
         Schema::create('amanah', function (Blueprint $table) {
             $table->id('id_amanah');
             $table->string('nama_amanah');

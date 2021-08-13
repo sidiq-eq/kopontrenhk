@@ -15,16 +15,14 @@
 					<div class="card">
 						<div class="card-header">
 							@if (session('status'))
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <div class="alert-message">
-                                    <b>{{session('status')}}</b>
-                                </div>
-                            </div>
-                        @endif
-							<h6 class="card-subtitle text-muted">Hanya Admin yang bisa masuk</h6>
+								<div class="alert {{session('alert-class')}} alert-dismissible" role="alert" id="message">
+									
+									<div class="alert-message">
+										<b>{{session('status')}}</b>
+									</div>
+								</div>
+							@endif
+							<h6 class="card-subtitle text-muted">Silahkan masuk ke System</h6>
 						</div>
 						<div class="card-body">
 							<form action="/auth-login" method="post">
@@ -49,5 +47,12 @@
 
 @endsection
 @section('script')
-
+<script>
+	setTimeout(function() {
+        $('#message').fadeTo(500, 0).slideUp(500, function(){
+                    
+        $(this).remove(); 
+        });
+    }, 6000);
+</script>
 @endsection

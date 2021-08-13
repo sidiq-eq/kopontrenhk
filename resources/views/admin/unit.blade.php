@@ -13,10 +13,8 @@
                 <div class="card">
                     <div class="card-header">
                         @if (session('status'))
-                            <div class="alert alert-success alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
+                            <div class="alert {{session('alert-class')}} alert-dismissible" role="alert" id="message">
+                                
                                 <div class="alert-message">
                                     <b>{{session('status')}}</b>
                                 </div>
@@ -24,7 +22,7 @@
                         @endif
                         <h5 class="card-title">Berikut data unit kopontren HK</h5>
                         <h6 class="card-subtitle text-muted">Anda bisa manage data unit usaha</h6>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#tambah_unit"><i class="fas fa-business-time""></i> Tambah Unit</button> | <button class="btn btn-success" data-toggle="modal" data-target="#tambah_amanah"><i class="fas fa-user-tie"></i> Tambah Amanah</button>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#tambah_unit"><i class="fas fa-business-time""></i> Tambah Unit</button> | <button class="btn btn-success" data-toggle="modal" data-target="#tambah_amanah"><i class="fas fa-user-tie"></i> Tambah Amanah</button> | <button class="btn btn-outline-primary" data-toggle="modal" data-target="#daftarkan_unit"><i class="fas fa-plus-circle"></i> Daftarkan Unit</button> | <button class="btn btn-outline-danger" data-toggle="modal" data-target="#hapusdaftar_unit"><i class="fa fa-minus-circle"></i> Hapus Daftar Unit</button>
                     </div>
                     <table class="table table-striped table-hover">
                         <thead>
@@ -32,6 +30,7 @@
                                 <th>#</th>
                                 <th>Kode</th>
                                 <th>Nama Unit Usaha</th>
+                                <th>Status</th>
                                 <th>aksi</th>
                             </tr>
                         </thead>
@@ -45,6 +44,7 @@
                                     {{$unit->id_unit}}
                                 </td>
                                 <td>{{$unit->nama_unit}}</td>
+                                <td>{{$unit->status}}</td>
                                 
                                 <td>
                                     <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#update_unit" data-id="{{$unit->id_unit}}" data-nama="{{$unit->nama_unit}}" onclick="update_unit('{{$unit->id_unit}}','{{$unit->nama_unit}}')"><li class="fa fa-pen"></li></button>
@@ -182,6 +182,76 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="daftarkan_unit" tabindex="-1" aria-modal="true" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Form Daftarkan Unit Usaha</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body m-3">
+                <p>Mendaftarkan Unit Usaha adalah dimana unit usaha membutuhkan laporan secara realtime ke system</p>
+                <form class="form-horizontal" action="/unit/daftarkan" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Kode Unit</label>
+                    <div class="col-sm">
+                        <select name="id" id="" class="form-control">
+                            <option value="" disabled selected>-- Pilih Unit --</option>
+                            @foreach ($data as $item)
+                            <option value="{{$item->id_unit}}">{{$item->nama_unit}}</option>
+                            @endforeach
+                        </select>
+                        
+                    </div>
+                    </div>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Tambah</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="hapusdaftar_unit" tabindex="-1" aria-modal="true" role="dialog" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Form Hapus Daftar Unit Usaha</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body m-3">
+                <p>Menghapus Daftar berarti </p>
+                <form class="form-horizontal" action="/unit/hapusdaftar" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Kode Unit</label>
+                    <div class="col-sm">
+                        <select name="id" id="" class="form-control">
+                            <option value="" disabled selected>-- Pilih Unit --</option>
+                            @foreach ($data as $item)
+                            <option value="{{$item->id_unit}}">{{$item->nama_unit}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-danger">Hapus</button>
+                    </form>
+                        
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="hapus_unit" tabindex="-1" aria-modal="true" role="dialog" >
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -280,7 +350,12 @@
 
 @section('script')
 <script>
-    
+    setTimeout(function() {
+        $('#message').fadeTo(500, 0).slideUp(500, function(){
+                    
+        $(this).remove(); 
+        });
+    }, 6000);
     function update_unit(id,nama){
         $("input[name='id']").val(id);
         $("input[name='nama']").val(nama);
@@ -299,12 +374,12 @@
 
 $(document).ready(function(){
     $('#kode').change(function(){
-            kode=$('#kode option:selected').data('kode');
-            unit=$('#kode option:selected').data('unit');
-            $('#id_unit').val(kode);
-            $('#nama_unit').val(unit);
-            console.log(unit);
-        });
+        kode=$('#kode option:selected').data('kode');
+        unit=$('#kode option:selected').data('unit');
+        $('#id_unit').val(kode);
+        $('#nama_unit').val(unit);
+        console.log(unit);
+    });
     
 
 
@@ -316,8 +391,9 @@ $(document).ready(function(){
         console.log(id_unit,nama_unit);
         modal.find('.modal-body #id_hapus_unit').val(id_unit);
         modal.find('.modal-body #hapus_unit_id').val(nama_unit);
+        });
     });
-});
+    
     $(document).ready(function() {
         $('#tabel').DataTable()
     } );

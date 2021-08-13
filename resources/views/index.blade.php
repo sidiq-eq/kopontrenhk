@@ -15,6 +15,14 @@
 				<div class="col-12 col-xl-6">
 					<div class="card">
 						<div class="card-header">
+							@if (session('status'))
+								<div class="alert {{session('alert-class')}} alert-dismissible" role="alert" id="message">
+									
+									<div class="alert-message">
+										<b>{{session('status')}}</b>
+									</div>
+								</div>
+							@endif
 							<h6 class="card-subtitle text-muted">Silahkan absen sesuai nama</h6>
 						</div>
 						<div class="card-body">
@@ -47,6 +55,7 @@
 											@endif
 										<?php endforeach; ?>
 									</select>
+									<small id="karyawan_status"></small>
 									@error('nama')
 									<div class="invalid-feedback">
 										{{$message}}
@@ -107,13 +116,22 @@
 
 										<label class="form-label">Lokasi</label>
 											<button type="button" id="lokasi" class="btn btn-info" onclick="getLocation()"><li class="fas fa-map-marker-alt"></li> Lokasi</button>
+											<button class="btn btn-info" id="loadingdiv" disabled style="display:none">
+												<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+												<span class="sr-only">Loading...</span>
+											</button>
 										<label class="form-label">  |  Foto</label>
 											<button type="button" id="upload" class="btn btn-success" data-toggle="modal" data-target="#camera"><li class="fas fa-camera"></li> Kamera</button>
+											<button class="btn btn-success" id="loadingdiv" type="button" style="display: none">
+												<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+												<span class="sr-only">Loading...</span>
+											</button>
 										@error('foto')
 											<small>harap upload foto</small>
 											
 										@enderror
 										<small id="status"></small>
+										
 									</center>
 								</div>
 								<div>
@@ -123,7 +141,9 @@
 									</center>
 								</div>
 								<input type="hidden" id="uri" value="" name="foto">
-								<button type="submit" class="btn btn-lg btn-block btn-primary"><span class="fas fa-sign-in-alt"></span> Submit</button>
+								<button type="submit" class="spinner-button btn btn-lg btn-block btn-primary" id="submit" onclick="submit()"><span class="fas fa-sign-in-alt"></span> Submit</button>
+							
+								
 							</form>
 						</div>
 					</div>
@@ -147,10 +167,9 @@
                 <div id="my_camera"></div>
             </div>
             <div class="modal-footer">
-				<center>
 
-					<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close" onclick="take_snapshot()">Ambil Foto</button>
-				</center>
+
+					<button type="button" class="btn btn-block btn-primary btn-lg" data-dismiss="modal" aria-label="Close" onclick="take_snapshot()">Ambil Foto</button>
             </div>
         </div>
     </div>
@@ -158,30 +177,72 @@
 @endsection
 @section('script')
 <script>
+	if(
+		(("standalone" in window.navigator)&& !window.navigator.standalone)
+		||
+		(!window.matchMedia('(display-mode : standalone)').matches)
+	){
+		addToHomescreen({ skipFirstVisit: true, startDelay: 15, });
+		//window.addToHomescreen();
+	}
+</script>
 
+<script>
+	 setTimeout(function() {
+        $('#message').fadeTo(500, 0).slideUp(500, function(){
+                    
+        $(this).remove(); 
+        });
+    }, 6000);
 	var x = document.getElementById("demo");
 	function getLocation() {
+	    $("#loadingdiv").css("display","inline");
 	if (navigator.geolocation) {
+	    
 		navigator.geolocation.getCurrentPosition(showPosition);
 	} else {
 		x.innerHTML = "Geolocation is not supported by this browser.";
 	}
 	}
 
-	function showPosition(position) {
-		x.innerHTML = "Latitude: " + position.coords.latitude +
-		"<br>Longitude: " + position.coords.longitude;
-		var img_url = "https://maps.google.com/?q="+position.coords.latitude+","+position.coords.longitude+"";
-		console.log(img_url);
+	// $('#nama').change(function() {
+    //     var id = $(this).find(':selected')[0].id;
+    //     alert(id); 
+    //     $.ajax({
+    //         type:'POST',
+    //         url:'../include/continent.php',
+    //         data:{'id':id},
+    //         success:function(data){
+    //             // the next thing you want to do 
+			
+	// 			}
+	// 		}
+    //     });
 
+    // });
+
+	function showPosition(position) {
+		$("#loadingdiv").css("display","none");
+		x.innerHTML = "<span class='fas fa-check-circle alert-success'></span> Lokasi Berhasil Terdeteksi &nbsp;&nbsp;"
+		var img_url = "https://maps.google.com/?q="+position.coords.latitude+","+position.coords.longitude+"";
+		//console.log(img_url);
+		
 		document.getElementById('lokasi').setAttribute("disabled",'');
+		
 		document.getElementById('loc').setAttribute("value",img_url);
 	}
+	
+	function submit(){
+	    jQuery('#activity_pane').showLoading();
+	}
+	
 	$(document).ready(function(){
-		Webcam.set( 'constraints',{ facingMode:'environment' });
+	    $('#nama').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+		Webcam.set( 'constraints',{ facingMode:'front' });
 		Webcam.set({
-		width: 320,
-		height: 240,
+		width: 220,
+		height: 330,
+		
 		image_format: 'jpg',
 		jpeg_quality: 90
 		});
@@ -202,18 +263,61 @@
             amanah=$('#nama option:selected').data('amanah');
             id=$('#nama option:selected').data('id');
             nama=$('#nama').val();
-            console.log(nama);
-            console.log(amanah);
+        	var nama_pendek = TextAbstract(nama,15);
             $('#amanahid').val(amanah);
             $('#id').val(id);
+			$.ajax({
+				type: 'post',
+                url : '/get_status',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'id':id
+                    },
+                dataType :'json',
+				success:function(data){
+					if(data>0){
+						$('#inputKet').val('Pulang');
+						$('#up').css('display','inline-block').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						$('#down').css('display','none');
+						
+						//$("#inputKet").fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						$('#inputKet').attr('readonly','readonly').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						$('#karyawan_status').text(nama_pendek+', Anda sudah absen datang otomatis ket. jadi "Pulang"').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);;
+					}
+					else{
+						$('#inputKet').val('Datang');
+						$('#up').css('display','none');
+						$('#down').css('display','inline-block').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						//$("#inputKet").fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						$('#inputKet').attr('readonly','readonly').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+						
+						$('#karyawan_status').text(nama_pendek+', Anda belum absen datang otomatis ket. jadi "Datang"').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);;
+					}
+			
+				}
+			});
+
         });
 	});
 
+	function TextAbstract(text, length) {
+		if (text == null) {
+			return "";
+		}
+		if (text.length <= length) {
+			return text;
+		}
+			text = text.substring(0, length);
+			last = text.lastIndexOf(" ");
+			text = text.substring(0, last);
+			return text + "...";
+	}
 	function take_snapshot() {
 			Webcam.snap( function(data_uri) {
-							document.getElementById('status').innerHTML = '<li class="fa fa-check"></li>'+'Sukses! Upload Foto';
+							document.getElementById('demo').innerHTML += '<span class="fas fa-check-circle alert-success"></span>'+'Sukses! Upload Foto';
 							document.getElementById('upload').setAttribute("disabled",'');
-							document.getElementById('uri').setAttribute('value',data_uri)
+							document.getElementById('uri').setAttribute('value',data_uri);
+							$('#demo').fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
 			} );
 			
 		}

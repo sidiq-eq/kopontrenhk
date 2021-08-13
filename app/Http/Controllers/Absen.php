@@ -65,15 +65,47 @@ class Absen extends BaseController
             ['absen.ket','=',$request->ket],
             ['absen.tgl','=',$tgl]
         ])->count();
+        $cek_absen2 = DB::table('absen')->orderBy('absen.waktu','desc')->where([
+            ['absen.id_karyawan','=',$request->id],
+            ['absen.ket','=','Datang'],
+            ['absen.tgl','=',$tgl],
+        ])->first();
+        //dd($cek_absen2);
         if($cek_absen > 0){
             return redirect('cek')->with('status','Data Tidak Masuk, '.$request->nama.' Anda telah absen sebelumnya dengan status sama!')->with('alert-class','alert-danger');
+        }else if($request->ket=='Pulang' && $cek_absen2==null){
+            return redirect('/')->with('status','Data Tidak Masuk, '.$request->nama.' Anda Belum absen Datang')->with('alert-class','alert-danger');
         }else{
             if($absen_model->save()){
-                return redirect('cek')->with('status','Alhamdulillah, '.$request->nama.' Anda telah absen '.$request->ket.'')->with('alert-class','alert-success');
+                if($request->ket=='Pulang'){
+                    DB::table('absen_single')->where([['id_karyawan','=',$request->id],['tgl','=',$tgl]])->update(['pulang'=>$request->waktu]);
+                    return redirect('cek')->with('status','Alhamdulillah, '.$request->nama.' Anda telah absen '.$request->ket.'')->with('alert-class','alert-success');
+                }else{
+                    DB::table('absen_single')->insert([
+                        'id_karyawan'=> $request->id,
+                        'tgl'=> $tgl,
+                        'datang'=>$request->waktu,
+                        'pulang'=> 0,
+                        
+                    ]);
+                    return redirect('cek')->with('status','Alhamdulillah, '.$request->nama.' Anda telah absen '.$request->ket.'')->with('alert-class','alert-success');
+                }
             } else{
                 return redirect('cek')->with('status','Data Gagal masuk');
             }
         }
         
+    }
+    public function get_status(Request $request){
+        $id = $request->input('id');
+        $tgl = date('Y-m-d');
+        $ket = $request->input('tgl');
+        $cek_absen = DB::table('absen')->orderBy('absen.waktu','desc')->where([
+            ['absen.id_karyawan','=',$id],
+            ['absen.tgl','=',$tgl]
+        ])->count();
+
+        return response()->json($cek_absen, 200);
+        //echo json_encode($data_absen);
     }
 }

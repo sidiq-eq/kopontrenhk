@@ -14,6 +14,7 @@ class Absen extends Migration
     public function up()
     {
         //
+        Schema::dropIfExists('absen');
         Schema::create('absen', function (Blueprint $table) {
             $table->id('id_absen');
             $table->string('id_karyawan');

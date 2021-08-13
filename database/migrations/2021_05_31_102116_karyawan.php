@@ -19,7 +19,7 @@ class Karyawan extends Migration
             $table->char('id_unit');
             $table->integer('id_amanah');
             $table->date('masuk');
-            $table->string('no_hp');
+            $table->string('no_hp')->nullable();
             $table->timestamps();
         });
     }

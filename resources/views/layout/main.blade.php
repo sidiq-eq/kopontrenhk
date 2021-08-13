@@ -11,12 +11,20 @@ date_default_timezone_set("Asia/Bangkok");
 	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
 	<meta name="author" content="AdminKit">
 	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Rolos Chicken">
 
 	<link rel="shortcut icon" href="{{asset('img/icons/icon-48x48.png')}}" />
 	<link href="{{asset('/fontawesome/css/all.css')}}" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/zf/dt-1.10.24/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.css"/>
 	@yield('head')
 	<link rel="shortcut icon" href="{{url('kopontren.jpg')}}">
+	<link rel="shortcut icon" href="{{url('/asset/add-to-homescreen-master/style/addtohomescreen.css')}}">
+	<link rel="shortcut icon" href="{{url('/asset/add-to-homescreen-master/src/addtohomescreen.min')}}">
 	<title>@yield('title')</title>
 
 	<link href="{{asset('asset/css/app.css')}}" rel="stylesheet">
@@ -190,7 +198,8 @@ date_default_timezone_set("Asia/Bangkok");
 	@yield('modal')
 	<script src="{{asset('asset/js/app.js')}}"></script>
 	<script src="{{asset('asset/js/jquery.min.js')}}"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/v/zf/dt-1.10.24/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 
 	@yield('script')
 </body>

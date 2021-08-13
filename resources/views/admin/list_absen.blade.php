@@ -252,7 +252,7 @@
                         </div>
                     </div>
                     <div class="row">
-                            <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#defaultModalPrimary"><li class="fas fa-search"></li> Cari Data</button>
+                            <button type="submit" class="btn btn-info" data-toggle="modal" ><li class="fas fa-search"></li> Cari Data</button>
                         </form>
                         </div>
                     </div>

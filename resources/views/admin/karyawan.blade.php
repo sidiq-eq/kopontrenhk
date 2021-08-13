@@ -26,7 +26,7 @@
                         <h6 class="card-subtitle text-muted">Anda bisa manage data karyawan</h6>
                         <button class="btn btn-primary" data-toggle="modal" data-target="#tambah"><i class="far fa-user"></i> Tambah Karyawan</button>
                     </div>
-                    <table id="tabel" class="table table-striped table-hover">
+                    <table id="tabel" class="table table-responsive table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>

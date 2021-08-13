@@ -19,21 +19,23 @@ date_default_timezone_set("Asia/Bangkok");
 	<title>@yield('title')</title>
 
 	<link href="{{asset('asset/css/app.css')}}" rel="stylesheet">
+	
+	
 </head>
 
 <body>
 	<div class="wrapper">
 		<nav id="sidebar" class="sidebar">
 			<div class="sidebar-content js-simplebar">
-				<a class="sidebar-brand" href="{{url('/')}}">
+				<a class="sidebar-brand" href="{{url('/beranda')}}">
           <span class="align-middle">Kopontren HK</span>
         </a>
 
 				<ul class="sidebar-nav">
 
                     <li class="sidebar-item">
-						<a class="sidebar-link" href="{{url('/')}}">
-							<i class="fab fa-wpforms"></i> <span class="align-middle">Beranda</span>
+						<a class="sidebar-link" href="{{url('/beranda')}}">
+							<i class="fas fa-home"></i> <span class="align-middle">Beranda</span>
             			</a>
 					</li>
 					<li class="sidebar-header">
@@ -41,11 +43,11 @@ date_default_timezone_set("Asia/Bangkok");
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{url('/karyawan')}}">
-							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Karyawan</span>
+							<i class="fa fa-user"></i> <span class="align-middle">Manage Karyawan</span>
             			</a>
 						
 						<a class="sidebar-link" href="{{url('/gaji')}}">
-							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Penggajian</span>
+							<i class="fas fa-money-check-alt"></i> <span class="align-middle">Manage Penggajian</span>
             			</a>
 						
 					</li>
@@ -54,10 +56,13 @@ date_default_timezone_set("Asia/Bangkok");
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{url('/unit')}}">
-							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Unit</span>
+							<i class="fas fa-business-time"></i> <span class="align-middle">Manage Unit</span>
             			</a>
 						<a class="sidebar-link" href="{{url('/komponen')}}">
 							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Komponen</span>
+            			</a>
+						<a class="sidebar-link" href="{{url('/laporan-pendapatan')}}">
+							<i class="fab fa-wpforms"></i> <span class="align-middle">Laporan Pendapatan</span>
             			</a>
 						
 					</li>
@@ -66,11 +71,23 @@ date_default_timezone_set("Asia/Bangkok");
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{url('/list_absen')}}">
-							<i class="fab fa-wpforms"></i> <span class="align-middle">List Absensi</span>
+							<i class="fab fa-wpforms"></i> <span class="align-middle">Rekap Absensi</span>
             			</a>
-                        <a class="sidebar-link" href="{{url('/')}}">
+                        {{-- <a class="sidebar-link" href="{{url('/')}}">
 							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Absensi</span>
+            			</a> --}}
+					</li>
+
+					<li class="sidebar-header">
+						User
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{url('/user')}}">
+							<i class="fa fa-user"></i> <span class="align-middle">User System</span>
             			</a>
+                        {{-- <a class="sidebar-link" href="{{url('/')}}">
+							<i class="fab fa-wpforms"></i> <span class="align-middle">Manage Absensi</span>
+            			</a> --}}
 					</li>
 
 
@@ -91,7 +108,7 @@ date_default_timezone_set("Asia/Bangkok");
 						System
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{url('/login')}}">
+						<a class="sidebar-link" href="{{url('/logout')}}">
 							<i class="fas fa-chevron-right"></i> <span class="align-middle">Keluar</span>
             			</a>
 					</li>
@@ -192,7 +209,7 @@ date_default_timezone_set("Asia/Bangkok");
 							</a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-								<i class="fa fa-user"></i> <span class="text-dark">Admin</span>
+								<i class="fa fa-user"></i> <span class="text-dark">{{session('user')}}</span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
@@ -222,7 +239,9 @@ date_default_timezone_set("Asia/Bangkok");
 	@yield('modal')
 	<script src="{{asset('asset/js/app.js')}}"></script>
 	<script src="{{asset('asset/js/jquery.min.js')}}"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/v/zf/dt-1.10.24/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.7.2/jquery-ui.min.js" integrity="sha256-4h4SHCCUAKFl7xWF9JeZp9tnU8lmM5bt6G3kNK6E4ek=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 
 	@yield('script')
 </body>
